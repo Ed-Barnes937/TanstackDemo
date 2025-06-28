@@ -1,18 +1,14 @@
-import { fetchUsers } from "@/queries/fetchUsers"
-import { useQuery } from "@tanstack/react-query"
+import { useUsers } from "@/queries/fetchUsers"
 import { Spinner } from "../Spinner"
 import Table from "../Table"
 
-const InLineQuery = () => {
-  const { data: users, isLoading, isError, error } = useQuery({
-    queryKey: ['users', 'inline'],
-    queryFn: fetchUsers
-  })
+const ReusableHook = () => {
+  const { data: users, isLoading, isError, error } = useUsers()
 
   if (isLoading) return <Spinner />
   if (isError) return <div className="text-red-500">{error.message}</div>
   return (
-    <div className="border border-[#002B36] rounded-lg">
+    <div className="shadow-md shadow-[#859900]/20 rounded-lg">
       <Table>
         <Table.Header>
           <Table.Row>
@@ -64,4 +60,4 @@ const InLineQuery = () => {
   )
 }
 
-export default InLineQuery
+export default ReusableHook

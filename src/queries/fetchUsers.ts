@@ -1,34 +1,46 @@
-export interface Address {
-  street: string
-  suite: string
-  city: string
-  zipcode: string
+import { useQuery } from "@tanstack/react-query"
+
+const baseUrl = 'https://dummyjson.com'
+
+export interface BaseResponse {
+  total: number
+  skip: number
+  limit: number
 }
 
-export interface Company {
-  name: string
-  catchPhrase: string
-  bs: string
-}
 
 export interface User {
   id: number
-  name: string
+  firstName: string
+  lastName: string
+  age: number
   username: string
   email: string
-  address: Address
-  phone: string
-  website: string
-  company: Company
+}
+
+export interface UserResponse {
+  users: User[]
+  total: number
+  skip: number
+  limit: number
 }
 
 export const fetchUsers = async (): Promise<User[]> => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users')
+  const res = await fetch(`${baseUrl}/users?limit=15`)
+  const json = await res.json() as unknown as UserResponse
+  const users = json.users
   await new Promise(resolve => setTimeout(resolve, 1000))
-  return res.json()
+  return users
 }
 
 export const fetchUserOptions = {
   queryKey: ['users'],
   queryFn: fetchUsers
+}
+
+export const useUsers = () => {
+  return useQuery({
+    queryKey: ['users', 'reusable'],
+    queryFn: fetchUsers
+  })
 }

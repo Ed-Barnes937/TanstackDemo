@@ -6,7 +6,7 @@ interface TableProps {
 }
 const Table = ({ children, className }: TableProps) => {
   return (
-    <table className={`w-full border-collapse border border-gray-300 ${className}`}>
+    <table className={`p-6 w-full border-collapse rounded-lg overflow-hidden ${className}`}>
       {children}
     </table>
   )
@@ -14,7 +14,7 @@ const Table = ({ children, className }: TableProps) => {
 
 const TableHeader = ({ children }: TableProps) => {
   return (
-    <thead>
+    <thead className="bg-[#002B36]">
       {children}
     </thead>
   )
@@ -22,7 +22,7 @@ const TableHeader = ({ children }: TableProps) => {
 
 const TableHeaderCell = ({children}: TableProps) => {
   return (
-    <th>
+    <th className="font-semibold text-left text-[#B58900] py-2 px-6">
       {children}
     </th>
   )
@@ -38,7 +38,7 @@ const TableBody = ({ children }: TableProps) => {
 
 const TableRow = ({ children }: TableProps) => {
   return (
-    <tr>
+    <tr className="not-last:border-b border-gray-200">
       {children}
     </tr>
   )
@@ -46,7 +46,7 @@ const TableRow = ({ children }: TableProps) => {
 
 const TableCell = ({ children }: TableProps) => {
   return (
-    <td className="text-center">
+    <td className="text-left py-2 px-6">
       {children}
     </td>
   )
