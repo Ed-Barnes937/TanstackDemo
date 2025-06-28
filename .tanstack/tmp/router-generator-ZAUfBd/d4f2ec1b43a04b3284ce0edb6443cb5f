@@ -1,0 +1,14 @@
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/_table/$pageNum')({
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+  return <div>
+    <h1 className='font-bold text-3xl'>TanStack Table Demo</h1>
+    <div className='w-screen h-screen overflow-auto'>
+      <Outlet />
+    </div>
+  </div>
+}

@@ -1,0 +1,21 @@
+import Stepper from '@/components/Stepper'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { Suspense } from 'react'
+
+export const Route = createFileRoute('/table/$pageNum')({
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+  const { pageNum } = Route.useParams()
+
+  return <div>
+    <h1 className='font-bold text-3xl'>TanStack Table Demo</h1>
+    <div className='w-screen h-screen overflow-auto'>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Outlet />
+      </Suspense>
+    </div>
+    <Stepper steps={3} currentStep={Number(pageNum ?? 1) - 1} />
+  </div>
+}

@@ -1,0 +1,43 @@
+import Table from '@/components/Table'
+import { fetchUserOptions } from '@/queries/fetchUsers'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/table/1')({
+  
+  loader: async ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData(fetchUserOptions)
+  },
+  component: RouteComponent
+})
+
+function RouteComponent() {
+  const { data: users }= useSuspenseQuery(fetchUserOptions)
+  return (<section className='h-full flex flex-col items-center gap-10'>
+    <Table>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Email</Table.HeaderCell>
+          <Table.HeaderCell>Phone</Table.HeaderCell>
+          <Table.HeaderCell>Website</Table.HeaderCell>
+          <Table.HeaderCell>Company</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {users?.map((user) => (
+          <Table.Row key={user.id}>
+            <Table.Cell>{user.name}</Table.Cell>
+            <Table.Cell>{user.email}</Table.Cell>
+            <Table.Cell>{user.phone}</Table.Cell>
+            <Table.Cell>{user.website}</Table.Cell>
+            <Table.Cell>{user.company.name}</Table.Cell>
+          <Table.Cell>
+            <button>Edit</button>
+          </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  </section>)
+}
