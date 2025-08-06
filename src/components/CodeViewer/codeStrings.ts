@@ -8,11 +8,9 @@ const codeStrings = [`
     if (isLoading) return <Spinner />
     if (isError) return <div className="text-red-500">{error.message}</div>
     return (
-      <div className="shadow-md shadow-gray-100 rounded-lg">
-        <Table>
-          ...
-        </Table>
-      </div>
+      <Table>
+        ...
+      </Table>
     )
   }
   `,
@@ -30,11 +28,86 @@ const codeStrings = [`
     if (isLoading) return <Spinner />
     if (isError) return <div className="text-red-500">{error.message}</div>
     return (
-      <div className="shadow-md shadow-gray-100 rounded-lg">
-        <Table>
-          ...
-        </Table>
-      </div>
+      <Table>
+        ...
+      </Table>
+    )
+  }
+  `,
+  `
+  export const fetchUserOptions = {
+    queryKey: ['users'],
+    queryFn: fetchUsers
+  }
+
+  const TableComponent = () => {
+    const { data: users, isLoading, isError, error } = useQuery(fetchUserOptions)
+
+    if (isLoading) return <Spinner />
+    if (isError) return <div className="text-red-500">{error.message}</div>
+    return (
+      <Table>
+        ...
+      </Table>
+    )
+  }
+  `,
+  `
+  export const fetchUserOptions = {
+    queryKey: ['users'],
+    queryFn: fetchUsers
+  }
+
+  const TableComponent = () => {
+    const { data: users, isError, error } = useSuspenseQuery(fetchUserOptions)
+
+    if (isError) return <div className="text-red-500">{error.message}</div>
+    return (
+      <Table>
+        ...
+      </Table>
+    )
+  }
+
+  const App = () => {
+    return (
+      <Suspense fallback={<Spinner />}>
+        <TableComponent />
+      </Suspense>
+    )
+  }
+  `,
+  `
+  // routes/table.tsx
+  const Route = createFileRoute('/table')({
+    component: RouteComponent,
+    loader: async ({ context }) => {
+      context.queryClient.ensureQueryData(fetchUserOptions)
+    }
+  })
+
+  // components/table.tsx
+  export const fetchUserOptions = {
+    queryKey: ['users'],
+    queryFn: fetchUsers
+  }
+
+  const TableComponent = () => {
+    const { data: users, isError, error } = useSuspenseQuery(fetchUserOptions)
+
+    if (isError) return <div className="text-red-500">{error.message}</div>
+    return (
+      <Table>
+        ...
+      </Table>
+    )
+  }
+
+  const App = () => {
+    return (
+      <Suspense fallback={<Spinner />}>
+        <TableComponent />
+      </Suspense>
     )
   }
   `

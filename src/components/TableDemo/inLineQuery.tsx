@@ -1,11 +1,12 @@
 import { fetchUsers } from "@/queries/fetchUsers"
+import { StepType } from "@/utils/StepTypes"
 import { useQuery } from "@tanstack/react-query"
 import { Spinner } from "../Spinner"
 import Table from "../Table"
 
 const InLineQuery = () => {
   const { data: users, isLoading, isError, error } = useQuery({
-    queryKey: ['users', 'inline'],
+    queryKey: ['users', StepType.InlineQuery],
     queryFn: fetchUsers
   })
 

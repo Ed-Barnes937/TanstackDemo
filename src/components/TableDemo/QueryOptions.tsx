@@ -1,12 +1,19 @@
-import { useUsers } from "@/queries/fetchUsers"
-import { Spinner } from "../Spinner"
-import Table from "../Table"
+import { fetchUserOptions } from "@/queries/fetchUsers";
+import { StepType } from "@/utils/StepTypes";
+import { useQuery } from "@tanstack/react-query";
+import { Spinner } from "../Spinner";
+import Table from "../Table";
 
-const ReusableHook = () => {
-  const { data: users, isLoading, isError, error } = useUsers()
+const QueryOptions = () => {
+  const {
+    data: users,
+    isLoading,
+    isError,
+    error,
+  } = useQuery(fetchUserOptions({ feature: StepType.QueryOptions }));
 
-  if (isLoading) return <Spinner />
-  if (isError) return <div className="text-red-500">{error.message}</div>
+  if (isLoading) return <Spinner />;
+  if (isError) return <div className="text-red-500">{error.message}</div>;
   return (
     <div className="border border-[#002B36] rounded-lg">
       <Table>
@@ -57,7 +64,7 @@ const ReusableHook = () => {
         </Table.Body>
       </Table>
     </div>
-  )
-}
+  );
+};
 
-export default ReusableHook
+export default QueryOptions;

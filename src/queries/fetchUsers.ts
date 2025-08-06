@@ -1,3 +1,4 @@
+import { StepType } from "@/utils/StepTypes"
 import { useQuery } from "@tanstack/react-query"
 
 const baseUrl = 'https://dummyjson.com'
@@ -33,14 +34,14 @@ export const fetchUsers = async (): Promise<User[]> => {
   return users
 }
 
-export const fetchUserOptions = {
-  queryKey: ['users'],
+export const fetchUserOptions = ({feature}: {feature: StepType}) => ({
+  queryKey: ['users', feature],
   queryFn: fetchUsers
-}
+})
 
 export const useUsers = () => {
   return useQuery({
-    queryKey: ['users', 'reusable'],
+    queryKey: ['users', StepType.ReusableHook],
     queryFn: fetchUsers
   })
 }

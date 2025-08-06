@@ -10,7 +10,7 @@ const Stepper = ({ steps, currentStep }: StepperProps) => {
   return (
     <div className="flex flex-row justify-between gap-6 items-center">
       <Link
-        className="p-2 border border-[#859900] rounded-md disabled:cursor-not-allowed"
+        className="p-2 bg-[#002B36] text-[#B58900] font-semibold rounded-md disabled:cursor-not-allowed"
         to={`/table/$pageNum`}
         params={{ pageNum: (currentStep-1).toString() }}
         disabled={currentStep === 0}
@@ -20,14 +20,14 @@ const Stepper = ({ steps, currentStep }: StepperProps) => {
         {Array.from({ length: steps }, (_, index) => (
           <div
             key={index}
-            className={`rounded-full border border-[#859900] w-4 h-4 ${
-              (currentStep-1) === index ? "bg-[#859900]" : ""
+            className={`rounded-full bg-[#002B36] w-4 h-4 ${
+              (currentStep-1) === index ? "outline-3 outline-offset-1 outline-[#B58900]" : ""
             }`}
           />
         ))}
       </div>
       <Link
-        className="p-2 border border-[#859900] rounded-md disabled:cursor-not-allowed"
+        className="p-2 bg-[#002B36] text-[#B58900] font-semibold rounded-md disabled:cursor-not-allowed"
         to={`/table/$pageNum`}
         params={{ pageNum: (currentStep + 1).toString() }}
         disabled={(currentStep-1) === steps - 1}

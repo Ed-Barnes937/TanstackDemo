@@ -2,10 +2,18 @@ import CodeViewer from '@/components/CodeViewer/CodeViewer'
 import PageHeader from '@/components/PageHeader'
 import Stepper from '@/components/Stepper'
 import CurrentStep from '@/components/TableDemo/CurrentStep'
+import { fetchUserOptions } from '@/queries/fetchUsers'
+import { StepType } from '@/utils/StepTypes'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/table/$pageNum')({
   component: RouteComponent,
+  loader: async ({ context, params }) => {
+    const pageNum = Number(params.pageNum)
+    if (pageNum === 5) { // we are showing off the router prefetching
+      context.queryClient.ensureQueryData(fetchUserOptions({feature: StepType.Prefetch}))
+    }
+  }
 })
 
 function RouteComponent() {
@@ -19,7 +27,7 @@ function RouteComponent() {
           <div className='grow'>
             <CurrentStep step={Number(pageNum ?? 1) - 1} />
           </div>
-          <div className='flex justify-center'><Stepper steps={3} currentStep={Number(pageNum ?? 1)} /></div>
+          <div className='flex justify-center'><Stepper steps={10} currentStep={Number(pageNum ?? 1)} /></div>
         </div>
         <CodeViewer step={Number(pageNum ?? 1) - 1} />
       </div>
