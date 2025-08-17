@@ -20,16 +20,18 @@ function RouteComponent() {
   const { pageNum } = Route.useParams()
 
   return (
-    <div className='flex flex-col gap-4 justify-between h-full overflow-auto p-4'>
-      <PageHeader step={Number(pageNum ?? 1) - 1} />
-      <div className='grow flex flex-row gap-4'>
+    <div className='flex flex-col gap-4 justify-between min-h-0 h-full overflow-auto p-4'>
+      <PageHeader step={Number(pageNum ?? 1)} />
+      <div className='grow flex flex-row gap-4 min-h-0 h-full'>
         <div className='grow flex flex-col gap-4'>
           <div className='grow'>
-            <CurrentStep step={Number(pageNum ?? 1) - 1} />
+            <CurrentStep step={Number(pageNum ?? 1)} />
           </div>
           <div className='flex justify-center'><Stepper steps={10} currentStep={Number(pageNum ?? 1)} /></div>
         </div>
-        <CodeViewer step={Number(pageNum ?? 1) - 1} />
+        <div className='overflow-y-auto h-full w-1/2 bg-[#002B36] p-6 rounded-lg shadow-md shadow-gray-100'>
+          <CodeViewer step={Number(pageNum ?? 1)} />
+        </div>
       </div>
     </div>
     )

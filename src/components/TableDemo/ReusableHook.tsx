@@ -3,7 +3,7 @@ import { Spinner } from "../Spinner"
 import Table from "../Table"
 
 const ReusableHook = () => {
-  const { data: users, isLoading, isError, error } = useUsers()
+  const { data: users, isLoading, isError, error } = useUsers({})
 
   if (isLoading) return <Spinner />
   if (isError) return <div className="text-red-500">{error.message}</div>

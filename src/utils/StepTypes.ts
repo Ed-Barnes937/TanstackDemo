@@ -1,9 +1,9 @@
 export enum StepType {
-  InlineQuery = 0,
-  ReusableHook = 1,
-  QueryOptions = 2,
-  Suspense = 3,
-  Prefetch = 4,
+  InlineQuery = 1,
+  ReusableHook = 2,
+  QueryOptions = 3,
+  Suspense = 4,
+  Prefetch = 5,
 }
 
 export const StepNames: Record<StepType, string> = {

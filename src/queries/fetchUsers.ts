@@ -39,9 +39,9 @@ export const fetchUserOptions = ({feature}: {feature: StepType}) => ({
   queryFn: fetchUsers
 })
 
-export const useUsers = () => {
+export const useUsers = ({feature = StepType.ReusableHook}: {feature?: StepType}) => {
   return useQuery({
-    queryKey: ['users', StepType.ReusableHook],
+    queryKey: ['users', feature],
     queryFn: fetchUsers
   })
 }

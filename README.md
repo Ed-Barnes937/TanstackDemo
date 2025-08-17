@@ -6,7 +6,7 @@ Demo Tanstack Query
 |✅    | 2. Extract query function            | Move fetchUsers to /api/users.ts, minimal visual change – talk through code structure|
 |✅    | 3. Custom useUsersQuery hook         | Move logic to useUsersQuery(filter), cleaner component, same UI|
 |✅    | 4. Switch to useSuspenseQuery        | Use useSuspenseQuery, wrap table in `<Suspense fallback={<Spinner />}>`|
-|      | 5. Prefetch QueryOptions in Router   | Show preloading in Tanstack Router|
+|✅    | 5. Prefetch QueryOptions in Router   | Show preloading in Tanstack Router|
 |      | 6. Filtering with query key          | Add a text input to filter users by name, updates query key|
 |      | 7. Sorting & pagination              | Add sort header or dropdown + pagination buttons, include in query key|
 |      | 8. Mutations                         | Add "Add User" or "Delete" button per row – use useMutation|

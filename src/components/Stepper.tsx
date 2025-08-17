@@ -6,14 +6,13 @@ interface StepperProps {
 }
 
 const Stepper = ({ steps, currentStep }: StepperProps) => {
-  console.log(currentStep)
   return (
     <div className="flex flex-row justify-between gap-6 items-center">
       <Link
         className="p-2 bg-[#002B36] text-[#B58900] font-semibold rounded-md disabled:cursor-not-allowed"
         to={`/table/$pageNum`}
-        params={{ pageNum: (currentStep-1).toString() }}
-        disabled={currentStep === 0}
+        params={{ pageNum: (currentStep - 1).toString() }}
+        disabled={currentStep === 1}
       >
         Previous</Link>
       <div className="flex flex-row gap-2">
@@ -21,7 +20,7 @@ const Stepper = ({ steps, currentStep }: StepperProps) => {
           <div
             key={index}
             className={`rounded-full bg-[#002B36] w-4 h-4 ${
-              (currentStep-1) === index ? "outline-3 outline-offset-1 outline-[#B58900]" : ""
+              (currentStep) === index + 1 ? "outline-3 outline-offset-1 outline-[#B58900]" : ""
             }`}
           />
         ))}
@@ -30,7 +29,8 @@ const Stepper = ({ steps, currentStep }: StepperProps) => {
         className="p-2 bg-[#002B36] text-[#B58900] font-semibold rounded-md disabled:cursor-not-allowed"
         to={`/table/$pageNum`}
         params={{ pageNum: (currentStep + 1).toString() }}
-        disabled={(currentStep-1) === steps - 1}
+        preload={currentStep + 1 === 5 ? 'intent' : undefined}
+        disabled={currentStep === steps}
       >
         Next
       </Link>
