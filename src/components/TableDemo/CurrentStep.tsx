@@ -5,10 +5,11 @@ import InLineQuery from "./inLineQuery"
 import { Prefetch } from "./Prefetch"
 import QueryOptions from "./QueryOptions"
 import ReusableHook from "./ReusableHook"
+import { Sorting } from "./Sorting/Sorting"
 import SuspenseTable from "./Suspense"
 
-const CurrentStep = ({step}: {step: StepType}) => {
-  switch(step) {
+const CurrentStep = ({ step }: { step: StepType }) => {
+  switch (step) {
     case StepType.InlineQuery:
       return <InLineQuery />
     case StepType.ReusableHook:
@@ -25,6 +26,12 @@ const CurrentStep = ({step}: {step: StepType}) => {
       return (
         <Suspense fallback={<Spinner />}>
           <Prefetch />
+        </Suspense>
+      )
+    case StepType.Sorting:
+      return (
+        <Suspense fallback={<Spinner />}>
+          <Sorting />
         </Suspense>
       )
   }

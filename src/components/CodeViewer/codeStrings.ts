@@ -80,7 +80,7 @@ const codeStrings = [`
   `
   // routes/table.tsx
   const Route = createFileRoute('/table')({
-    component: RouteComponent,
+    component: TablePage,
     loader: async ({ context }) => {
       context.queryClient.ensureQueryData(fetchUserOptions)
     }
@@ -108,6 +108,39 @@ const codeStrings = [`
       <Suspense fallback={<Spinner />}>
         <TableComponent />
       </Suspense>
+    )
+  }
+  `,
+  `
+  // routes/table.tsx
+  export const Route = createFileRoute('/table')({
+    component: TablePage,
+    validateSearch: search => usersSearchSchema.parse(search)
+  })
+
+  // queries/queryKeyFactory.ts
+  export const queryKeyFactory = {
+    users: (feature: StepType, sortBy?: SortableFields, order?: Order) => ['users', feature, sortBy, order],
+  }
+
+  // queries/fetchUsers.ts
+  export const fetchSortedUsersOptions = ({feature, sortBy, order}: FetchUserOptionsParams) => ({
+    queryKey: queryKeyFactory.users(feature, sortBy, order),
+    queryFn: () => fetchUsers({sortBy, order})
+  })
+
+  // components/TableDemo/Sorting/Sorting.tsx
+  export const Sorting = () => {
+    const navigate = Route.useNavigate()
+    const { sortBy, order } = Route.useSearch();
+    const { data: users } = useSuspenseQuery(
+      fetchSortedUsersOptions({ feature: StepType.Sorting, sortBy, order })
+    );
+
+    return (
+      <Table>
+        ...
+      </Table>
     )
   }
   `

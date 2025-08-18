@@ -2,6 +2,7 @@ import CodeViewer from '@/components/CodeViewer/CodeViewer'
 import PageHeader from '@/components/PageHeader'
 import Stepper from '@/components/Stepper'
 import CurrentStep from '@/components/TableDemo/CurrentStep'
+import { usersSearchSchema } from '@/components/TableDemo/Sorting/UserSortParams'
 import { fetchUserOptions } from '@/queries/fetchUsers'
 import { StepType } from '@/utils/StepTypes'
 import { createFileRoute } from '@tanstack/react-router'
@@ -13,7 +14,8 @@ export const Route = createFileRoute('/table/$pageNum')({
     if (pageNum === 5) { // we are showing off the router prefetching
       context.queryClient.ensureQueryData(fetchUserOptions({feature: StepType.Prefetch}))
     }
-  }
+  },
+  validateSearch: search => usersSearchSchema.parse(search)
 })
 
 function RouteComponent() {

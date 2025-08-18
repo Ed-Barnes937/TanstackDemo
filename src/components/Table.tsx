@@ -20,9 +20,9 @@ const TableHeader = ({ children }: TableProps) => {
   )
 }
 
-const TableHeaderCell = ({children}: TableProps) => {
+const TableHeaderCell = ({children, onClick}: { onClick?: () => void } & TableProps) => {
   return (
-    <th className="font-semibold text-left text-[#B58900] py-2 px-6">
+    <th className="font-semibold text-left text-[#B58900] py-2 px-6" onClick={onClick}>
       {children}
     </th>
   )
