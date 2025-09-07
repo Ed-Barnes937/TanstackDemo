@@ -1,40 +1,36 @@
-import { StepType } from "@/utils/StepTypes"
-import { Suspense } from "react"
-import { Spinner } from "../Spinner"
-import InLineQuery from "./inLineQuery"
-import { Prefetch } from "./Prefetch"
-import QueryOptions from "./QueryOptions"
-import ReusableHook from "./ReusableHook"
-import { Sorting } from "./Sorting/Sorting"
-import SuspenseTable from "./Suspense"
+import { StepType } from "@/utils/StepTypes";
+import { Suspense } from "react";
+import { Spinner } from "../Spinner";
+import InLineQuery from "./inLineQuery";
+import { Prefetch } from "./Prefetch";
+import QueryOptions from "./QueryOptions";
+import ReusableHook from "./ReusableHook";
+import { Sorting } from "./Sorting/Sorting";
+import SuspenseTable from "./Suspense";
 
 const CurrentStep = ({ step }: { step: StepType }) => {
   switch (step) {
     case StepType.InlineQuery:
-      return <InLineQuery />
+      return <InLineQuery />;
     case StepType.ReusableHook:
-      return <ReusableHook />
+      return <ReusableHook />;
     case StepType.QueryOptions:
-      return <QueryOptions />
+      return <QueryOptions />;
     case StepType.Suspense:
       return (
         <Suspense fallback={<Spinner />}>
           <SuspenseTable />
         </Suspense>
-      )
+      );
     case StepType.Prefetch:
       return (
         <Suspense fallback={<Spinner />}>
           <Prefetch />
         </Suspense>
-      )
+      );
     case StepType.Sorting:
-      return (
-        <Suspense fallback={<Spinner />}>
-          <Sorting />
-        </Suspense>
-      )
+      return <Sorting />;
   }
-}
+};
 
-export default CurrentStep
+export default CurrentStep;

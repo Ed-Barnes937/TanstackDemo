@@ -1,4 +1,5 @@
-const codeStrings = [`
+const codeStrings = [
+  `
   const TableComponent = () => {
     const { data: users, isLoading, isError, error } = useQuery({
       queryKey: ['users'],
@@ -112,6 +113,12 @@ const codeStrings = [`
   }
   `,
   `
+  // UserSortParams.tsx
+  export const usersSearchSchema = z.object({
+    sortBy: z.enum(["firstName", "age"]).default("firstName").optional(),
+    order: z.enum(["asc", "desc"]).default("asc").optional(),
+  });
+
   // routes/table.tsx
   export const Route = createFileRoute('/table')({
     component: TablePage,
@@ -126,16 +133,21 @@ const codeStrings = [`
   // queries/fetchUsers.ts
   export const fetchSortedUsersOptions = ({feature, sortBy, order}: FetchUserOptionsParams) => ({
     queryKey: queryKeyFactory.users(feature, sortBy, order),
-    queryFn: () => fetchUsers({sortBy, order})
+    queryFn: () => fetchUsers({sortBy, order}),
+    placeholderData: keepPreviousData,
+    staleTime: 1000 * 60 * 5,
   })
 
   // components/TableDemo/Sorting/Sorting.tsx
   export const Sorting = () => {
     const navigate = Route.useNavigate()
-    const { sortBy, order } = Route.useSearch();
-    const { data: users } = useSuspenseQuery(
-      fetchSortedUsersOptions({ feature: StepType.Sorting, sortBy, order })
+    const { sortBy, order } = Route.useSearch()
+    const { data: users, isFetching, isPending, isError, error } = useQuery(
+      fetchSortedUsersOptions({ feature: StepType.Sorting, sortBy, order }),
     );
+
+    if (isPending) return <Spinner />
+    if (isError) return <div className="text-red-500">{error.message}</div>
 
     return (
       <Table>
@@ -143,7 +155,7 @@ const codeStrings = [`
       </Table>
     )
   }
-  `
-]
+  `,
+];
 
-export default codeStrings
+export default codeStrings;
