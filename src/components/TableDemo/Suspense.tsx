@@ -4,8 +4,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import Table from "../Table";
 
 const SuspenseTable = () => {
-  const { data: users } = useSuspenseQuery(
-    fetchUserOptions({ feature: StepType.Suspense })
+  const { data } = useSuspenseQuery(
+    fetchUserOptions({ feature: StepType.Suspense }),
   );
 
   return (
@@ -21,7 +21,7 @@ const SuspenseTable = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {users?.map((user) => (
+          {data.users?.map((user) => (
             <Table.Row key={user.id}>
               <Table.Cell>{user.firstName}</Table.Cell>
               <Table.Cell>{user.lastName}</Table.Cell>

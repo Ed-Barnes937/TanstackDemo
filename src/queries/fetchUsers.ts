@@ -1,7 +1,6 @@
-import type { SortableFields } from "@/components/TableDemo/Sorting/Sorting";
 import { StepType } from "@/utils/StepTypes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { queryKeyFactory } from "./queryKeyFactory";
+import { queryKeyFactory, type SortableFields } from "./queryKeyFactory";
 
 const baseUrl = "https://dummyjson.com";
 
@@ -31,21 +30,20 @@ export type Order = "asc" | "desc";
 interface FetchUsersParams {
   sortBy?: SortableFields;
   order?: Order;
+  page?: number;
 }
 
-export const fetchUsers = async ({
-  sortBy,
-  order,
-}: FetchUsersParams): Promise<User[]> => {
+export const fetchUsers = async ({ sortBy, order, page }: FetchUsersParams) => {
   const url = new URL(`${baseUrl}/users`);
-  url.searchParams.set("limit", "15");
+  const defaultLimit = 15;
+  url.searchParams.set("limit", String(defaultLimit));
   if (sortBy) url.searchParams.set("sortBy", sortBy);
   if (order) url.searchParams.set("order", order);
+  if (page) url.searchParams.set("skip", String((page - 1) * defaultLimit));
   const res = await fetch(url.toString());
   const json = (await res.json()) as unknown as UserResponse;
-  const users = json.users;
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  return users;
+  return { users: json.users, total: json.total };
 };
 
 export const fetchUserOptions = ({
@@ -62,9 +60,10 @@ export const fetchSortedUsersOptions = ({
   feature,
   sortBy,
   order,
+  page,
 }: FetchUserOptionsParams) => ({
-  queryKey: queryKeyFactory.users(feature, sortBy, order),
-  queryFn: () => fetchUsers({ sortBy, order }),
+  queryKey: queryKeyFactory.users(feature, sortBy, order, page),
+  queryFn: () => fetchUsers({ sortBy, order, page }),
   placeholderData: keepPreviousData,
   staleTime: 1000 * 60 * 5,
 });

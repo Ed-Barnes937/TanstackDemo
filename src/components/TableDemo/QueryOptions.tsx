@@ -5,14 +5,11 @@ import { Spinner } from "../Spinner";
 import Table from "../Table";
 
 const QueryOptions = () => {
-  const {
-    data: users,
-    isLoading,
-    isError,
-    error,
-  } = useQuery(fetchUserOptions({ feature: StepType.QueryOptions }));
+  const { data, isPending, isError, error } = useQuery(
+    fetchUserOptions({ feature: StepType.QueryOptions }),
+  );
 
-  if (isLoading) return <Spinner />;
+  if (isPending) return <Spinner />;
   if (isError) return <div className="text-red-500">{error.message}</div>;
   return (
     <div className="border border-[#002B36] rounded-lg">
@@ -27,7 +24,7 @@ const QueryOptions = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {users?.map((user) => (
+          {data.users?.map((user) => (
             <Table.Row key={user.id}>
               <Table.Cell>{user.firstName}</Table.Cell>
               <Table.Cell>{user.lastName}</Table.Cell>

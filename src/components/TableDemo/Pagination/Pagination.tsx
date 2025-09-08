@@ -1,3 +1,4 @@
+import { PaginationToolbar } from "@/components/PaginationToolbar";
 import { Spinner } from "@/components/Spinner";
 import { fetchSortedUsersOptions } from "@/queries/fetchUsers";
 import { Route as TableRoute } from "@/routes/table.$pageNum";
@@ -5,11 +6,11 @@ import { StepType } from "@/utils/StepTypes";
 import { useQuery } from "@tanstack/react-query";
 import Table from "../../Table";
 
-export const Sorting = () => {
+export const Pagination = () => {
   const navigate = TableRoute.useNavigate();
-  const { sortBy, order } = TableRoute.useSearch();
+  const { sortBy, order, page } = TableRoute.useSearch();
   const { data, isFetching, isPending, isError, error } = useQuery(
-    fetchSortedUsersOptions({ feature: StepType.Sorting, sortBy, order }),
+    fetchSortedUsersOptions({ feature: StepType.Sorting, sortBy, order, page }),
   );
 
   if (isPending) return <Spinner />;
@@ -71,6 +72,19 @@ export const Sorting = () => {
           ))}
         </Table.Body>
       </Table>
+      <div>
+        <PaginationToolbar
+          currentPage={page}
+          totalPages={data.total}
+          onPageChange={(newPage) => {
+            navigate({
+              search: {
+                page: newPage,
+              },
+            });
+          }}
+        />
+      </div>
     </div>
   );
 };

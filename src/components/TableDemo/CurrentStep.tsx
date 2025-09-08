@@ -2,6 +2,7 @@ import { StepType } from "@/utils/StepTypes";
 import { Suspense } from "react";
 import { Spinner } from "../Spinner";
 import InLineQuery from "./inLineQuery";
+import { Pagination } from "./Pagination/Pagination";
 import { Prefetch } from "./Prefetch";
 import QueryOptions from "./QueryOptions";
 import ReusableHook from "./ReusableHook";
@@ -30,6 +31,8 @@ const CurrentStep = ({ step }: { step: StepType }) => {
       );
     case StepType.Sorting:
       return <Sorting />;
+    case StepType.Pagination:
+      return <Pagination />;
   }
 };
 

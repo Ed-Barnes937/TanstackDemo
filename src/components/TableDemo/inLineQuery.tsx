@@ -1,17 +1,17 @@
-import { fetchUsers } from "@/queries/fetchUsers"
-import { StepType } from "@/utils/StepTypes"
-import { useQuery } from "@tanstack/react-query"
-import { Spinner } from "../Spinner"
-import Table from "../Table"
+import { fetchUsers } from "@/queries/fetchUsers";
+import { StepType } from "@/utils/StepTypes";
+import { useQuery } from "@tanstack/react-query";
+import { Spinner } from "../Spinner";
+import Table from "../Table";
 
 const InLineQuery = () => {
-  const { data: users, isLoading, isError, error } = useQuery({
-    queryKey: ['users', StepType.InlineQuery],
-    queryFn: fetchUsers
-  })
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["users", StepType.InlineQuery],
+    queryFn: () => fetchUsers({}),
+  });
 
-  if (isLoading) return <Spinner />
-  if (isError) return <div className="text-red-500">{error.message}</div>
+  if (isPending) return <Spinner />;
+  if (isError) return <div className="text-red-500">{error.message}</div>;
   return (
     <div className="border border-[#002B36] rounded-lg">
       <Table>
@@ -25,7 +25,7 @@ const InLineQuery = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {users?.map((user) => (
+          {data.users?.map((user) => (
             <Table.Row key={user.id}>
               <Table.Cell>{user.firstName}</Table.Cell>
               <Table.Cell>{user.lastName}</Table.Cell>
@@ -62,7 +62,7 @@ const InLineQuery = () => {
         </Table.Body>
       </Table>
     </div>
-  )
-}
+  );
+};
 
-export default InLineQuery
+export default InLineQuery;
