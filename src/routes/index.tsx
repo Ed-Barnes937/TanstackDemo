@@ -6,7 +6,7 @@ export const Route = createFileRoute("/")({
 
 function App() {
   return (
-    <div className="flex flex-col gap-4 items-center justify-center h-screen">
+    <div className="flex flex-col gap-4 items-center justify-center h-screen" style={{ viewTransitionName: 'main-content' }}>
       <Link
         className="text-2xl font-bold bg-[#002B36] text-[#B58900] p-4 rounded-lg shadow-2xl shadow-[#B58900]"
         from="/"

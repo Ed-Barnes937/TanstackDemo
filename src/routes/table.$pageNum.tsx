@@ -1,7 +1,7 @@
 import CodeViewer from "@/components/CodeViewer/CodeViewer";
+import CurrentStep from "@/components/CurrentStep";
 import PageHeader from "@/components/PageHeader";
 import Stepper from "@/components/Stepper";
-import CurrentStep from "@/components/TableDemo/CurrentStep";
 import { usersSearchSchema } from "@/components/TableDemo/Sorting/UserSortParams";
 import { fetchUserOptions } from "@/queries/fetchUsers";
 import { StepType } from "@/utils/StepTypes";
@@ -25,7 +25,7 @@ function RouteComponent() {
   const { pageNum } = Route.useParams();
 
   return (
-    <div className="flex flex-col gap-4 justify-between min-h-0 h-full overflow-auto p-4">
+    <div className="flex flex-col gap-4 justify-between min-h-0 h-full overflow-auto p-4" style={{ viewTransitionName: 'main-content' }}>
       <PageHeader step={Number(pageNum ?? 1)} />
       <div className="grow flex flex-row gap-4 min-h-0 h-full">
         <div className="grow flex flex-col gap-4 w-1/2">

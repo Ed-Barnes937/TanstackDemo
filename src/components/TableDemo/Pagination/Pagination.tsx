@@ -72,19 +72,17 @@ export const Pagination = () => {
           ))}
         </Table.Body>
       </Table>
-      <div>
-        <PaginationToolbar
-          currentPage={page}
-          totalPages={data.total}
-          onPageChange={(newPage) => {
-            navigate({
-              search: {
-                page: newPage,
-              },
-            });
-          }}
-        />
-      </div>
+      <PaginationToolbar
+        currentPage={page ?? 1}
+        totalPages={data.total}
+        onPageChange={(newPage) => {
+          navigate({
+            search: {
+              page: newPage,
+            },
+          });
+        }}
+      />
     </div>
   );
 };

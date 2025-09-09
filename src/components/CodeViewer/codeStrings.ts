@@ -1,12 +1,12 @@
 const codeStrings = [
-  `
+  `// components/Table.tsx
   const TableComponent = () => {
-    const { data: users, isLoading, isError, error } = useQuery({
+    const { data: users, isPending, isError, error } = useQuery({
       queryKey: ['users'],
       queryFn: fetchUsers
     })
 
-    if (isLoading) return <Spinner />
+    if (isPending) return <Spinner />
     if (isError) return <div className="text-red-500">{error.message}</div>
     return (
       <Table>
@@ -15,7 +15,7 @@ const codeStrings = [
     )
   }
   `,
-  `
+  `// queries/fetchUsers.ts
   export const useUsers = () => {
     return useQuery({
       queryKey: ['users'],
@@ -23,10 +23,11 @@ const codeStrings = [
     })
   }
 
+  // components/Table.tsx
   const TableComponent = () => {
-    const { data: users, isLoading, isError, error } = useUsers()
+    const { data: users, isPending, isError, error } = useUsers()
 
-    if (isLoading) return <Spinner />
+    if (isPending) return <Spinner />
     if (isError) return <div className="text-red-500">{error.message}</div>
     return (
       <Table>
@@ -35,16 +36,22 @@ const codeStrings = [
     )
   }
   `,
-  `
+  `// queries/fetchUsers.ts
   export const fetchUserOptions = {
     queryKey: ['users'],
     queryFn: fetchUsers
   }
 
+  // components/Table.tsx
   const TableComponent = () => {
-    const { data: users, isLoading, isError, error } = useQuery(fetchUserOptions)
+    const {
+      data: users,
+      isPending,
+      isError,
+      error
+    } = useQuery(fetchUserOptions)
 
-    if (isLoading) return <Spinner />
+    if (isPending) return <Spinner />
     if (isError) return <div className="text-red-500">{error.message}</div>
     return (
       <Table>
@@ -53,14 +60,19 @@ const codeStrings = [
     )
   }
   `,
-  `
+  `// queries/fetchUsers.ts
   export const fetchUserOptions = {
     queryKey: ['users'],
     queryFn: fetchUsers
   }
 
+  // components/Table.tsx
   const TableComponent = () => {
-    const { data: users, isError, error } = useSuspenseQuery(fetchUserOptions)
+    const {
+      data: users,
+      isError,
+      error
+    } = useSuspenseQuery(fetchUserOptions)
 
     if (isError) return <div className="text-red-500">{error.message}</div>
     return (
@@ -70,6 +82,7 @@ const codeStrings = [
     )
   }
 
+  // App.tsx
   const App = () => {
     return (
       <Suspense fallback={<Spinner />}>
@@ -78,21 +91,23 @@ const codeStrings = [
     )
   }
   `,
-  `
-  // routes/table.tsx
+  `// routes/table.tsx
   const Route = createFileRoute('/table')({
     component: TablePage,
     loader: async ({ context }) => {
       context.queryClient.ensureQueryData(fetchUserOptions)
     }
   })
+  // OR
+  <Link to="/table" preload="intent">
 
-  // components/table.tsx
+  // queries/fetchUsers.ts
   export const fetchUserOptions = {
     queryKey: ['users'],
     queryFn: fetchUsers
   }
 
+  // components/Table.tsx
   const TableComponent = () => {
     const { data: users, isError, error } = useSuspenseQuery(fetchUserOptions)
 
@@ -104,6 +119,7 @@ const codeStrings = [
     )
   }
 
+  // App.tsx
   const App = () => {
     return (
       <Suspense fallback={<Spinner />}>
@@ -112,8 +128,7 @@ const codeStrings = [
     )
   }
   `,
-  `
-  // UserSortParams.tsx
+  `// UserSortParams.tsx
   export const usersSearchSchema = z.object({
     sortBy: z.enum(["firstName", "age"]).default("firstName").optional(),
     order: z.enum(["asc", "desc"]).default("asc").optional(),
@@ -138,7 +153,7 @@ const codeStrings = [
     staleTime: 1000 * 60 * 5,
   })
 
-  // components/TableDemo/Sorting/Sorting.tsx
+  // components/Table.tsx
   export const Sorting = () => {
     const navigate = Route.useNavigate()
     const { sortBy, order } = Route.useSearch()
@@ -156,6 +171,56 @@ const codeStrings = [
     )
   }
   `,
+  `// UserSortParams.tsx
+  export const usersSearchSchema = z.object({
+    ...,
+    page: z.number().min(1).default(1).optional(),
+  });
+
+  // queries/queryKeyFactory.ts
+  export const queryKeyFactory = {
+    users: (
+      ...
+      page?: number,
+    ) => ["users", ..., page],
+  };
+
+  // queries/fetchUsers.ts
+  export const fetchSortedUsersOptions = (
+    {..., page}:FetchUserOptionsParams
+  ) => ({
+    queryKey: queryKeyFactory.users(..., page),
+    queryFn: () => fetchUsers({..., page}),
+    placeholderData: keepPreviousData,
+    staleTime: 1000 * 60 * 5,
+  })
+
+  // components/Table.tsx
+  export const Sorting = () => {
+    const navigate = Route.useNavigate()
+    const { ..., page } = TableRoute.useSearch();
+    const { data, isFetching, isPending, isError, error } = useQuery(
+      fetchSortedUsersOptions({ ..., page }),
+    );
+
+    return (
+      <>
+        <Table>
+          ...
+        </Table>
+        <PaginationToolbar
+          currentPage={page ?? 1}
+          totalPages={data.total}
+          onPageChange={(newPage) => {
+            navigate({
+              search: {page: newPage},
+            });
+          }}
+        />
+      </>
+    )
+  }
+  `
 ];
 
 export default codeStrings;

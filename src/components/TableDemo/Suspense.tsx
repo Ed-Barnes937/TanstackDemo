@@ -13,10 +13,10 @@ const SuspenseTable = () => {
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>First Name</Table.HeaderCell>
-            <Table.HeaderCell>Last Name</Table.HeaderCell>
-            <Table.HeaderCell>age</Table.HeaderCell>
-            <Table.HeaderCell>Account</Table.HeaderCell>
+            <Table.HeaderCell className="w-40">First Name</Table.HeaderCell>
+            <Table.HeaderCell className="w-40">Last Name</Table.HeaderCell>
+            <Table.HeaderCell className="w-18">age</Table.HeaderCell>
+            <Table.HeaderCell className="w-auto">Account</Table.HeaderCell>
             {/* <Table.HeaderCell>{''}</Table.HeaderCell> */}
           </Table.Row>
         </Table.Header>

@@ -1,13 +1,14 @@
 import { StepType } from "@/utils/StepTypes";
 import { Suspense } from "react";
-import { Spinner } from "../Spinner";
-import InLineQuery from "./inLineQuery";
-import { Pagination } from "./Pagination/Pagination";
-import { Prefetch } from "./Prefetch";
-import QueryOptions from "./QueryOptions";
-import ReusableHook from "./ReusableHook";
-import { Sorting } from "./Sorting/Sorting";
-import SuspenseTable from "./Suspense";
+import { Spinner } from "./Spinner";
+import InLineQuery from "./TableDemo/inLineQuery";
+import { Pagination } from "./TableDemo/Pagination/Pagination";
+import { Prefetch } from "./TableDemo/Prefetch";
+import QueryOptions from "./TableDemo/QueryOptions";
+import ReusableHook from "./TableDemo/ReusableHook";
+import { Sorting } from "./TableDemo/Sorting/Sorting";
+import SuspenseTable from "./TableDemo/Suspense";
+
 
 const CurrentStep = ({ step }: { step: StepType }) => {
   switch (step) {
