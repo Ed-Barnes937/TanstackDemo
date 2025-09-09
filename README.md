@@ -8,7 +8,7 @@ Demo Tanstack Query
 | ✅   | 4. Switch to useSuspenseQuery      | Use useSuspenseQuery, wrap table in `<Suspense fallback={<Spinner />}>`               |
 | ✅   | 5. Prefetch QueryOptions in Router | Show preloading in Tanstack Router                                                    |
 | ✅   | 6. Sorting                         | Add sort header or dropdown, include in query key                                     |
-|      | 7. pagination                      | Add pagination buttons, include in query key                                          |
+| ✅   | 7. pagination                      | Add pagination buttons, include in query key                                          |
 |      | 8. Filtering with query key        | Add a text input to filter users by name, updates query key                           |
 |      | 9. Mutations                       | Add "Add User" or "Delete" button per row – use useMutation                           |
 |      | 10. Invalidate/refetch on mutation | On successful mutation, refetch the users query                                       |
