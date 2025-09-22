@@ -5,14 +5,14 @@ import {
   createUserOptions,
   deleteUserOptions,
 } from "@/mutations/userMutations";
-import { fetchUserOptions } from "@/queries/fetchUsers";
+import { fetchUserSimulatedOptions } from "@/queries/simulatedQueryOptions";
 import { StepType } from "@/utils/StepTypes";
 import { ArrowPathIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const Mutations = () => {
-  const { data, isPending, isError, error } = useQuery(
-    fetchUserOptions({ feature: StepType.Mutations }),
+  const { data, isPending, isFetching, isError, error } = useQuery(
+    fetchUserSimulatedOptions(StepType.Mutations),
   );
 
   const createUserMutation = useMutation(createUserOptions());
@@ -27,7 +27,7 @@ export const Mutations = () => {
 
   return (
     <>
-      <Table>
+      <Table isLoading={isFetching}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell className="w-40">First Name</Table.HeaderCell>
@@ -43,12 +43,7 @@ export const Mutations = () => {
               <Table.Cell>{user.firstName}</Table.Cell>
               <Table.Cell>{user.lastName}</Table.Cell>
               <Table.Cell>{user.age}</Table.Cell>
-              <Table.Cell>
-                <div className="flex flex-col gap-2">
-                  {user.username}
-                  {user.email}
-                </div>
-              </Table.Cell>
+              <Table.Cell>{user.email}</Table.Cell>
               <Table.Cell>
                 <button
                   onClick={() => handleDelete(user.id)}

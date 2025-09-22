@@ -1,4 +1,6 @@
 import type { User } from "@/queries/fetchUsers";
+import { dataSimulation } from "@/utils/dataSimulation";
+import { StepType } from "@/utils/StepTypes";
 
 export const baseUrl = "https://dummyjson.com";
 
@@ -13,9 +15,11 @@ export interface CreateUserResponse extends CreateUserInput {
   id: number;
 }
 
-export const createUser = async (
+export const createUserSimulated = async (
   userData: CreateUserInput,
-): Promise<CreateUserResponse> => {
+  feature: StepType,
+): Promise<User> => {
+  // Make the API call to dummyJSON for realism
   const response = await fetch(`${baseUrl}/users/add`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -26,12 +30,19 @@ export const createUser = async (
     throw new Error("Failed to create user");
   }
 
-  const result = await response.json();
+  // Add delay for realism
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  return result;
+
+  // Use simulation for actual data persistence
+  const newUser = dataSimulation.addUser(feature, userData);
+  return newUser;
 };
 
-export const deleteUser = async (userId: number): Promise<User> => {
+export const deleteUserSimulated = async (
+  userId: number,
+  feature: StepType,
+): Promise<User> => {
+  // Make the API call to dummyJSON for realism
   const response = await fetch(`${baseUrl}/users/${userId}`, {
     method: "DELETE",
   });
@@ -40,15 +51,40 @@ export const deleteUser = async (userId: number): Promise<User> => {
     throw new Error("Failed to delete user");
   }
 
-  const result = await response.json();
+  // Add delay for realism
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  return result;
+
+  // Use simulation for actual data persistence
+  const deletedUser = dataSimulation.deleteUser(feature, userId);
+  if (!deletedUser) {
+    throw new Error("User not found");
+  }
+
+  return deletedUser;
+};
+
+// Simulated error for testing optimistic updates
+export const deleteUserWithErrorSimulated = async (
+  userId: number,
+  _feature: StepType,
+): Promise<User> => {
+  // Make the API call to dummyJSON for realism
+  await fetch(`${baseUrl}/users/${userId}`, {
+    method: "DELETE",
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Simulate an error for demo purposes
+  throw new Error("Simulated server error - user deletion failed");
 };
 
 export const createUserOptions = () => ({
-  mutationFn: createUser,
+  mutationFn: (userData: CreateUserInput) =>
+    createUserSimulated(userData, StepType.Mutations),
 });
 
 export const deleteUserOptions = () => ({
-  mutationFn: deleteUser,
+  mutationFn: (userId: number) =>
+    deleteUserSimulated(userId, StepType.Mutations),
 });

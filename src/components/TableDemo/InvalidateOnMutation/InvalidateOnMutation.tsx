@@ -5,7 +5,7 @@ import {
   createUserWithInvalidationOptions,
   deleteUserWithInvalidationOptions,
 } from "@/mutations/userMutationsWithInvalidation";
-import { fetchUserOptions } from "@/queries/fetchUsers";
+import { fetchUserSimulatedOptions } from "@/queries/simulatedQueryOptions";
 import { StepType } from "@/utils/StepTypes";
 import { ArrowPathIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,8 +13,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export const InvalidateOnMutation = () => {
   const queryClient = useQueryClient();
 
-  const { data, isPending, isError, error } = useQuery(
-    fetchUserOptions({ feature: StepType.InvalidateOnMutation }),
+  const { data, isPending, isFetching, isError, error } = useQuery(
+    fetchUserSimulatedOptions(StepType.InvalidateOnMutation),
   );
 
   const createUserMutation = useMutation(
@@ -33,7 +33,7 @@ export const InvalidateOnMutation = () => {
 
   return (
     <>
-      <Table>
+      <Table isLoading={isFetching}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell className="w-40">First Name</Table.HeaderCell>
@@ -49,12 +49,7 @@ export const InvalidateOnMutation = () => {
               <Table.Cell>{user.firstName}</Table.Cell>
               <Table.Cell>{user.lastName}</Table.Cell>
               <Table.Cell>{user.age}</Table.Cell>
-              <Table.Cell>
-                <div className="flex flex-col gap-2">
-                  {user.username}
-                  {user.email}
-                </div>
-              </Table.Cell>
+              <Table.Cell>{user.email}</Table.Cell>
               <Table.Cell>
                 <button
                   onClick={() => handleDelete(user.id)}

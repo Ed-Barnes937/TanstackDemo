@@ -2,21 +2,16 @@ import type { User } from "@/queries/fetchUsers";
 import { queryKeyFactory } from "@/queries/queryKeyFactory";
 import { StepType } from "@/utils/StepTypes";
 import type { QueryClient } from "@tanstack/react-query";
-import { baseUrl, createUser, deleteUser } from "./userMutations";
-
-export const deleteUserWithErrorSimulation = async (userId: number) => {
-  await fetch(`${baseUrl}/users/${userId}`, {
-    method: "DELETE",
-  });
-
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Simulate an error for demo purposes
-  throw new Error("Simulated server error - user deletion failed");
-};
+import type { CreateUserInput } from "./userMutations";
+import {
+  createUserSimulated,
+  deleteUserSimulated,
+  deleteUserWithErrorSimulated,
+} from "./userMutations";
 
 export const createUserWithOptimisticOptions = (queryClient: QueryClient) => ({
-  mutationFn: createUser,
+  mutationFn: (userData: CreateUserInput) =>
+    createUserSimulated(userData, StepType.OptimisticUpdates),
   onSuccess: () => {
     queryClient.invalidateQueries({
       queryKey: queryKeyFactory.users(StepType.OptimisticUpdates),
@@ -25,7 +20,8 @@ export const createUserWithOptimisticOptions = (queryClient: QueryClient) => ({
 });
 
 export const deleteUserWithOptimisticOptions = (queryClient: QueryClient) => ({
-  mutationFn: deleteUser,
+  mutationFn: (userId: number) =>
+    deleteUserSimulated(userId, StepType.OptimisticUpdates),
   onMutate: async (deletedUserId: number) => {
     await queryClient.cancelQueries({
       queryKey: queryKeyFactory.users(StepType.OptimisticUpdates),
@@ -49,7 +45,7 @@ export const deleteUserWithOptimisticOptions = (queryClient: QueryClient) => ({
 
     return { previousUsers };
   },
-  onError: (err, deletedUserId, context) => {
+  onError: (_err: any, _deletedUserId: number, context: any) => {
     if (context?.previousUsers) {
       queryClient.setQueryData(
         queryKeyFactory.users(StepType.OptimisticUpdates),
@@ -67,7 +63,8 @@ export const deleteUserWithOptimisticOptions = (queryClient: QueryClient) => ({
 export const deleteUserWithOptimisticErrorOptions = (
   queryClient: QueryClient,
 ) => ({
-  mutationFn: deleteUserWithErrorSimulation,
+  mutationFn: (userId: number) =>
+    deleteUserWithErrorSimulated(userId, StepType.OptimisticUpdates),
   onMutate: async (deletedUserId: number) => {
     await queryClient.cancelQueries({
       queryKey: queryKeyFactory.users(StepType.OptimisticUpdates),
@@ -91,7 +88,7 @@ export const deleteUserWithOptimisticErrorOptions = (
 
     return { previousUsers };
   },
-  onError: (err, deletedUserId, context) => {
+  onError: (_err: any, _deletedUserId: number, context: any) => {
     if (context?.previousUsers) {
       queryClient.setQueryData(
         queryKeyFactory.users(StepType.OptimisticUpdates),

@@ -59,12 +59,7 @@ export const Sorting = () => {
             <Table.Cell>{user.firstName}</Table.Cell>
             <Table.Cell>{user.lastName}</Table.Cell>
             <Table.Cell>{user.age}</Table.Cell>
-            <Table.Cell>
-              <div className="flex flex-col gap-2">
-                {user.username}
-                {user.email}
-              </div>
-            </Table.Cell>
+            <Table.Cell>{user.email}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>

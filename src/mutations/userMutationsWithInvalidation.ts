@@ -1,12 +1,14 @@
 import { queryKeyFactory } from "@/queries/queryKeyFactory";
 import { StepType } from "@/utils/StepTypes";
 import type { QueryClient } from "@tanstack/react-query";
-import { createUser, deleteUser } from "./userMutations";
+import type { CreateUserInput } from "./userMutations";
+import { createUserSimulated, deleteUserSimulated } from "./userMutations";
 
 export const createUserWithInvalidationOptions = (
   queryClient: QueryClient,
 ) => ({
-  mutationFn: createUser,
+  mutationFn: (userData: CreateUserInput) =>
+    createUserSimulated(userData, StepType.InvalidateOnMutation),
   onSuccess: () => {
     queryClient.invalidateQueries({
       queryKey: queryKeyFactory.users(StepType.InvalidateOnMutation),
@@ -17,7 +19,8 @@ export const createUserWithInvalidationOptions = (
 export const deleteUserWithInvalidationOptions = (
   queryClient: QueryClient,
 ) => ({
-  mutationFn: deleteUser,
+  mutationFn: (userId: number) =>
+    deleteUserSimulated(userId, StepType.InvalidateOnMutation),
   onSuccess: () => {
     queryClient.invalidateQueries({
       queryKey: queryKeyFactory.users(StepType.InvalidateOnMutation),

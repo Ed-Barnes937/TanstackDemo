@@ -16,7 +16,6 @@ const SuspenseTable = () => {
           <Table.HeaderCell className="w-40">Last Name</Table.HeaderCell>
           <Table.HeaderCell className="w-18">age</Table.HeaderCell>
           <Table.HeaderCell className="w-auto">Account</Table.HeaderCell>
-          {/* <Table.HeaderCell>{''}</Table.HeaderCell> */}
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -25,12 +24,7 @@ const SuspenseTable = () => {
             <Table.Cell>{user.firstName}</Table.Cell>
             <Table.Cell>{user.lastName}</Table.Cell>
             <Table.Cell>{user.age}</Table.Cell>
-            <Table.Cell>
-              <div className="flex flex-col gap-2">
-                {user.username}
-                {user.email}
-              </div>
-            </Table.Cell>
+            <Table.Cell>{user.email}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
