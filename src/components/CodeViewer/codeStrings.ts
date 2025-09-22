@@ -230,7 +230,7 @@ const codeStrings = [
     mutationFn: deleteUser,
   });
 
-  // components/Mutations.tsx
+  // components/Table.tsx
   export const Mutations = () => {
     const { data, isPending, isError, error } = useQuery(
       fetchUserOptions({ feature: StepType.Mutations })
@@ -246,32 +246,40 @@ const codeStrings = [
           setShowForm(false);
           setFormData({ firstName: "", lastName: "", age: 25, email: "" });
         },
+        onError: (error) => {
+          console.error('Failed to create user:', error);
+        },
       });
     };
 
     const handleDelete = (userId: number) => {
-      deleteUserMutation.mutate(userId);
+      deleteUserMutation.mutate(userId, {
+        onError: (error) => {
+          console.error('Failed to delete user:', error);
+        },
+      });
     };
 
     return (
       <div>
-        <form onSubmit={handleSubmit}>
-          ...
-        </form>
         <Table>
           <Table.Body>
             {data.users?.map((user) => (
               <Table.Row key={user.id}>
                 ...
                 <Table.Cell>
-                  <button onClick={() => handleDelete(user.id)}>
-                    Delete
+                  <button
+                    onClick={() => handleDelete(user.id)}
+                    disabled={deleteUserMutation.isPending}
+                  >
+                    {deleteUserMutation.isPending ? 'Deleting...' : 'Delete'}
                   </button>
                 </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table>
+        <form onSubmit={handleSubmit}>...</form>
       </div>
     );
   };
@@ -295,7 +303,7 @@ const codeStrings = [
     },
   });
 
-  // components/InvalidateOnMutation.tsx
+  // components/Table.tsx
   export const InvalidateOnMutation = () => {
     const queryClient = useQueryClient();
     const { data, isPending, isError, error } = useQuery(
@@ -309,7 +317,6 @@ const codeStrings = [
       e.preventDefault();
       createUserMutation.mutate(formData, {
         onSuccess: () => {
-          // Query invalidation happens automatically in mutation options
           setShowForm(false);
           setFormData({ firstName: "", lastName: "", age: 25, email: "" });
         },
@@ -317,14 +324,13 @@ const codeStrings = [
     };
 
     const handleDelete = (userId: number) => {
-      // Query invalidation happens automatically in mutation options
       deleteUserMutation.mutate(userId);
     };
 
     return (
       <div>
-        <form onSubmit={handleSubmit}>...</form>
         <Table>...</Table>
+        <form onSubmit={handleSubmit}>...</form>
       </div>
     );
   };
@@ -369,7 +375,7 @@ const codeStrings = [
     },
   });
 
-  // components/OptimisticUpdates.tsx
+  // components/Table.tsx
   export const OptimisticUpdates = () => {
     const queryClient = useQueryClient();
     const deleteUserMutation = useMutation(deleteUserWithOptimisticOptions(queryClient));
@@ -377,10 +383,6 @@ const codeStrings = [
 
     const handleDelete = (userId: number) => {
       deleteUserMutation.mutate(userId); // User disappears immediately
-    };
-
-    const handleDeleteError = (userId: number) => {
-      deleteUserErrorMutation.mutate(userId); // User disappears, then reappears on error
     };
 
     return (
@@ -391,7 +393,6 @@ const codeStrings = [
               ...
               <Table.Cell>
                 <button onClick={() => handleDelete(user.id)}>Delete</button>
-                <button onClick={() => handleDeleteError(user.id)}>Delete (Error)</button>
               </Table.Cell>
             </Table.Row>
           ))}

@@ -25,15 +25,15 @@ function RouteComponent() {
   const { pageNum } = Route.useParams();
 
   return (
-    <div
-      className="flex flex-col gap-4 justify-between min-h-0 h-full overflow-auto p-4"
-      style={{
-        viewTransitionName: "main-content",
-        isolation: "isolate",
-      }}
-    >
+    <div className="flex flex-col gap-4 justify-between min-h-0 h-full overflow-auto p-4">
       <PageHeader step={Number(pageNum ?? 1)} />
-      <div className="grow flex flex-row gap-4 min-h-0 h-full">
+      <div
+        className="grow flex flex-row gap-4 min-h-0 h-full"
+        style={{
+          viewTransitionName: "main-content",
+          isolation: "isolate",
+        }}
+      >
         <div className="grow flex flex-col gap-4 w-1/2">
           <div className="grow">
             <CurrentStep step={Number(pageNum ?? 1)} />
