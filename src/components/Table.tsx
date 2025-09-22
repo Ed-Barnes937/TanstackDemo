@@ -9,11 +9,13 @@ interface TableProps {
 const Table = ({ children, className, isLoading }: TableProps) => {
   return (
     <>
-      <table
-        className={`p-6 w-full table-fixed border-collapse rounded-lg overflow-hidden ${className}`}
-      >
-        {children}
-      </table>
+      <div className="border border-blue rounded-lg">
+        <table
+          className={`p-6 w-full table-fixed border-collapse rounded-md overflow-hidden ${className}`}
+        >
+          {children}
+        </table>
+      </div>
       {isLoading && <IndeterminateProgress />}
     </>
   );

@@ -220,7 +220,186 @@ const codeStrings = [
       </>
     )
   }
-  `
+  `,
+  `// mutations/userMutations.ts
+  export const createUserOptions = () => ({
+    mutationFn: createUser,
+  });
+
+  export const deleteUserOptions = () => ({
+    mutationFn: deleteUser,
+  });
+
+  // components/Mutations.tsx
+  export const Mutations = () => {
+    const { data, isPending, isError, error } = useQuery(
+      fetchUserOptions({ feature: StepType.Mutations })
+    );
+
+    const createUserMutation = useMutation(createUserOptions());
+    const deleteUserMutation = useMutation(deleteUserOptions());
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      createUserMutation.mutate(formData, {
+        onSuccess: () => {
+          setShowForm(false);
+          setFormData({ firstName: "", lastName: "", age: 25, email: "" });
+        },
+      });
+    };
+
+    const handleDelete = (userId: number) => {
+      deleteUserMutation.mutate(userId);
+    };
+
+    return (
+      <div>
+        <form onSubmit={handleSubmit}>
+          ...
+        </form>
+        <Table>
+          <Table.Body>
+            {data.users?.map((user) => (
+              <Table.Row key={user.id}>
+                ...
+                <Table.Cell>
+                  <button onClick={() => handleDelete(user.id)}>
+                    Delete
+                  </button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
+    );
+  };
+  `,
+  `// mutations/userMutationsWithInvalidation.ts
+  export const createUserWithInvalidationOptions = (queryClient: QueryClient) => ({
+    mutationFn: createUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeyFactory.users(StepType.InvalidateOnMutation),
+      });
+    },
+  });
+
+  export const deleteUserWithInvalidationOptions = (queryClient: QueryClient) => ({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeyFactory.users(StepType.InvalidateOnMutation),
+      });
+    },
+  });
+
+  // components/InvalidateOnMutation.tsx
+  export const InvalidateOnMutation = () => {
+    const queryClient = useQueryClient();
+    const { data, isPending, isError, error } = useQuery(
+      fetchUserOptions({ feature: StepType.InvalidateOnMutation })
+    );
+
+    const createUserMutation = useMutation(createUserWithInvalidationOptions(queryClient));
+    const deleteUserMutation = useMutation(deleteUserWithInvalidationOptions(queryClient));
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      createUserMutation.mutate(formData, {
+        onSuccess: () => {
+          // Query invalidation happens automatically in mutation options
+          setShowForm(false);
+          setFormData({ firstName: "", lastName: "", age: 25, email: "" });
+        },
+      });
+    };
+
+    const handleDelete = (userId: number) => {
+      // Query invalidation happens automatically in mutation options
+      deleteUserMutation.mutate(userId);
+    };
+
+    return (
+      <div>
+        <form onSubmit={handleSubmit}>...</form>
+        <Table>...</Table>
+      </div>
+    );
+  };
+  `,
+  `// mutations/userMutationsWithOptimistic.ts
+  export const deleteUserWithOptimisticOptions = (queryClient: QueryClient) => ({
+    mutationFn: deleteUser,
+    onMutate: async (deletedUserId: number) => {
+      await queryClient.cancelQueries({
+        queryKey: queryKeyFactory.users(StepType.OptimisticUpdates),
+      });
+
+      const previousUsers = queryClient.getQueryData(
+        queryKeyFactory.users(StepType.OptimisticUpdates)
+      );
+
+      queryClient.setQueryData(
+        queryKeyFactory.users(StepType.OptimisticUpdates),
+        (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            users: old.users.filter((user) => user.id !== deletedUserId),
+          };
+        }
+      );
+
+      return { previousUsers };
+    },
+    onError: (err, deletedUserId, context) => {
+      if (context?.previousUsers) {
+        queryClient.setQueryData(
+          queryKeyFactory.users(StepType.OptimisticUpdates),
+          context.previousUsers
+        );
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeyFactory.users(StepType.OptimisticUpdates),
+      });
+    },
+  });
+
+  // components/OptimisticUpdates.tsx
+  export const OptimisticUpdates = () => {
+    const queryClient = useQueryClient();
+    const deleteUserMutation = useMutation(deleteUserWithOptimisticOptions(queryClient));
+    const deleteUserErrorMutation = useMutation(deleteUserWithOptimisticErrorOptions(queryClient));
+
+    const handleDelete = (userId: number) => {
+      deleteUserMutation.mutate(userId); // User disappears immediately
+    };
+
+    const handleDeleteError = (userId: number) => {
+      deleteUserErrorMutation.mutate(userId); // User disappears, then reappears on error
+    };
+
+    return (
+      <Table>
+        <Table.Body>
+          {data.users?.map((user) => (
+            <Table.Row key={user.id}>
+              ...
+              <Table.Cell>
+                <button onClick={() => handleDelete(user.id)}>Delete</button>
+                <button onClick={() => handleDeleteError(user.id)}>Delete (Error)</button>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    );
+  };
+  `,
 ];
 
 export default codeStrings;

@@ -17,7 +17,7 @@ export const Pagination = () => {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="border border-blue rounded-lg">
+    <>
       <Table isLoading={isFetching}>
         <Table.Header>
           <Table.Row>
@@ -83,6 +83,6 @@ export const Pagination = () => {
           });
         }}
       />
-    </div>
+    </>
   );
 };
