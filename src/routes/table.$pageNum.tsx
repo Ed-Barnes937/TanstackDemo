@@ -27,7 +27,10 @@ function RouteComponent() {
   return (
     <div
       className="flex flex-col gap-4 justify-between min-h-0 h-full overflow-auto p-4"
-      style={{ viewTransitionName: "main-content" }}
+      style={{
+        viewTransitionName: "main-content",
+        isolation: "isolate",
+      }}
     >
       <PageHeader step={Number(pageNum ?? 1)} />
       <div className="grow flex flex-row gap-4 min-h-0 h-full">
@@ -42,7 +45,7 @@ function RouteComponent() {
             />
           </div>
         </div>
-        <div className="overflow-y-auto h-full w-1/2 bg-[#002B36] p-6 rounded-lg shadow-md shadow-gray-100">
+        <div className="overflow-y-auto h-full w-1/2 bg-blue p-6 rounded-lg shadow-md shadow-gray-100">
           <CodeViewer step={Number(pageNum ?? 1)} />
         </div>
       </div>

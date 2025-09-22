@@ -99,15 +99,18 @@ const Stepper = ({ steps, currentStep }: StepperProps) => {
         ))}
       </div>
       <Link
-        className="p-2 bg-blue text-yellow font-semibold rounded-md data-disabled:cursor-not-allowed data-disabled:text-gray-400"
-        to={`/table/$pageNum`}
-        params={{ pageNum: (currentStep + 1).toString() }}
+        className="p-2 bg-blue text-yellow font-semibold rounded-md"
+        to={currentStep < steps ? `/table/$pageNum` : "/furtherReading"}
+        params={
+          currentStep < steps
+            ? { pageNum: (currentStep + 1).toString() }
+            : undefined
+        }
         preload={currentStep + 1 === 5 ? "intent" : undefined}
-        disabled={currentStep === steps}
-        data-disabled={currentStep === steps ? true : null}
-        viewTransition={{ types: ["slide-left"] }}
       >
-        {currentStep < steps ? StepNames[(currentStep + 1) as StepType] : "N/A"}
+        {currentStep < steps
+          ? StepNames[(currentStep + 1) as StepType]
+          : "More Reading"}
       </Link>
     </div>
   );

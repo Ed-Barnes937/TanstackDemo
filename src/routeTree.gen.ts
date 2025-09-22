@@ -9,9 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LinksRouteImport } from './routes/links'
+import { Route as FurtherReadingRouteImport } from './routes/furtherReading'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TablePageNumRouteImport } from './routes/table.$pageNum'
 
+const LinksRoute = LinksRouteImport.update({
+  id: '/links',
+  path: '/links',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FurtherReadingRoute = FurtherReadingRouteImport.update({
+  id: '/furtherReading',
+  path: '/furtherReading',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -25,32 +37,54 @@ const TablePageNumRoute = TablePageNumRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/furtherReading': typeof FurtherReadingRoute
+  '/links': typeof LinksRoute
   '/table/$pageNum': typeof TablePageNumRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/furtherReading': typeof FurtherReadingRoute
+  '/links': typeof LinksRoute
   '/table/$pageNum': typeof TablePageNumRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/furtherReading': typeof FurtherReadingRoute
+  '/links': typeof LinksRoute
   '/table/$pageNum': typeof TablePageNumRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/table/$pageNum'
+  fullPaths: '/' | '/furtherReading' | '/links' | '/table/$pageNum'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/table/$pageNum'
-  id: '__root__' | '/' | '/table/$pageNum'
+  to: '/' | '/furtherReading' | '/links' | '/table/$pageNum'
+  id: '__root__' | '/' | '/furtherReading' | '/links' | '/table/$pageNum'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FurtherReadingRoute: typeof FurtherReadingRoute
+  LinksRoute: typeof LinksRoute
   TablePageNumRoute: typeof TablePageNumRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/links': {
+      id: '/links'
+      path: '/links'
+      fullPath: '/links'
+      preLoaderRoute: typeof LinksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/furtherReading': {
+      id: '/furtherReading'
+      path: '/furtherReading'
+      fullPath: '/furtherReading'
+      preLoaderRoute: typeof FurtherReadingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -70,6 +104,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FurtherReadingRoute: FurtherReadingRoute,
+  LinksRoute: LinksRoute,
   TablePageNumRoute: TablePageNumRoute,
 }
 export const routeTree = rootRouteImport

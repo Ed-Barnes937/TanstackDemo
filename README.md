@@ -16,3 +16,4 @@ Demo Tanstack Query
 |      | 12. Conditional queries (enabled)  | Only fetch users if a certain filter or toggle is active                                                                  |
 |      | 13. select to transform data       | Use select to add computed fields (e.g., fullName from first + last) before display                                       |
 |      | 14. Dependent queries              | Add detail panel per user row that only fetches when a user is selected                                                   |
+|      | 15. Parallel queries               | dynamically fetch user's posts in parallel                                                                                |
